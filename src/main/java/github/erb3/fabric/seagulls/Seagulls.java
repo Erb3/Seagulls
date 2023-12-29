@@ -29,8 +29,9 @@ public class Seagulls implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        FabricDefaultAttributeRegistry.register(SEAGULL, SeagullEntity.attributes());
         Registry.register(Registries.ITEM, new Identifier("seagulls", "seagull_spawn_egg"), SEAGULL_SPAWN_EGG);
-        FabricDefaultAttributeRegistry.register(SEAGULL, SeagullEntity.createMobAttributes());
+
 
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.SPAWN_EGGS).register(content -> {
             content.add(SEAGULL_SPAWN_EGG);

@@ -4,9 +4,16 @@ import github.erb3.fabric.seagulls.Seagulls;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.AboveGroundTargeting;
 import net.minecraft.entity.ai.NoPenaltySolidTargeting;
+import net.minecraft.entity.ai.control.FlightMoveControl;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.ai.pathing.PathNodeType;
+import net.minecraft.entity.attribute.AttributeContainer;
+import net.minecraft.entity.attribute.DefaultAttributeContainer;
+import net.minecraft.entity.attribute.EntityAttribute;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.mob.FlyingEntity;
+import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.entity.passive.PassiveEntity;
@@ -28,6 +35,7 @@ public class SeagullEntity extends AnimalEntity {
 
     public SeagullEntity(EntityType<? extends AnimalEntity> entityType, World world) {
         super(entityType, world);
+        this.moveControl = new FlightMoveControl(this, 10, true);
         this.setPathfindingPenalty(PathNodeType.DAMAGE_FIRE, -16);
         this.setPathfindingPenalty(PathNodeType.STICKY_HONEY, -8);
         this.setPathfindingPenalty(PathNodeType.WATER, 16);
@@ -35,14 +43,19 @@ public class SeagullEntity extends AnimalEntity {
     }
 
     protected void initGoals() {
-//        this.goalSelector.add(0, new SwimGoal(this));
-//        this.goalSelector.add(1, new EscapeDangerGoal(this, 1.4));
-//        this.goalSelector.add(2, new AnimalMateGoal(this, 1.0));
-//        this.goalSelector.add(2, new LookAtEntityGoal(this, PlayerEntity.class, 6.0F));
-//        this.goalSelector.add(3, new TemptGoal(this, 1.0, BREEDING_INGREDIENT, false));
-//        this.goalSelector.add(4, new FollowParentGoal(this, 1.25));
-//        this.goalSelector.add(7, new LookAroundGoal(this));
-        this.goalSelector.add(12, new SeagullEntity.SeagullWanderAroundGoal());
+        this.goalSelector.add(1, new EscapeDangerGoal(this, 1.4));
+        this.goalSelector.add(2, new AnimalMateGoal(this, 1.0));
+        this.goalSelector.add(2, new LookAtEntityGoal(this, PlayerEntity.class, 6.0F));
+        this.goalSelector.add(3, new TemptGoal(this, 1.0, BREEDING_INGREDIENT, false));
+        this.goalSelector.add(4, new FollowParentGoal(this, 1.25));
+        this.goalSelector.add(5, new LookAroundGoal(this));
+//        this.goalSelector.add(32, new FlyGoal(this, 6.0F));
+        this.goalSelector.add(32, new SeagullWanderAroundGoal(this));
+    }
+
+    public static DefaultAttributeContainer.Builder attributes() {
+        return MobEntity.createMobAttributes()
+                .add(EntityAttributes.GENERIC_FLYING_SPEED, 0.7D);
     }
 
     @Nullable
@@ -65,40 +78,17 @@ public class SeagullEntity extends AnimalEntity {
         return BREEDING_INGREDIENT.test(stack);
     }
 
-    class SeagullWanderAroundGoal extends Goal {
-        SeagullWanderAroundGoal() {
-            this.setControls(EnumSet.of(Control.MOVE));
-        }
+    static class SeagullWanderAroundGoal extends WanderAroundFarGoal {
 
-        public boolean canStart() {
-            return SeagullEntity.this.navigation.isIdle();
-        }
-
-        public boolean shouldContinue() {
-            return SeagullEntity.this.navigation.isFollowingPath();
-        }
-
-        public void start() {
-            Vec3d vec3d = this.getRandomLocation();
-
-            if (vec3d != null) {
-                SeagullEntity.this.navigation.startMovingAlong(SeagullEntity.this.navigation.findPathTo(BlockPos.ofFloored(vec3d), 1), 1.0);
-            }
+        public SeagullWanderAroundGoal(PathAwareEntity pathAwareEntity) {
+            super(pathAwareEntity, 2.5f);
         }
 
         @Nullable
-        private Vec3d getRandomLocation() {
-            Vec3d rotationVec = SeagullEntity.this.getRotationVec(0.0F);
-
-            return AboveGroundTargeting.find(
-                    SeagullEntity.this,
-                    8,
-                    24,
-                    rotationVec.x,
-                    rotationVec.z,
-                    (float) (Math.PI / 2),
-                    100,
-                    8);
+        protected Vec3d getWanderTarget() {
+            Vec3d vec3d = this.mob.getRotationVec(0.0F);
+            Vec3d vec3d2 = AboveGroundTargeting.find(this.mob, 8, 7, vec3d.x, vec3d.z, (float) (Math.PI / 2), 3, 1);
+            return vec3d2 != null ? vec3d2 : NoPenaltySolidTargeting.find(this.mob, 8, 4, -2, vec3d.x, vec3d.z, (float) (Math.PI / 2));
         }
     }
 }

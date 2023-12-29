@@ -1,8 +1,9 @@
 # Seagulls
 
-A minecraft mod adding annoying seagulls.
+A Minecraft mod adding annoying seagulls.
 
 [<img src="https://raw.githubusercontent.com/ModFest/art/3bf66556e674d670e30f647d6a48c4e1798c21d4/badge/128h/ModFest%201.20%20Badge%20Cozy.png" width="256" alt="ModFest 1.20">](https://modfest.net/1.20)
+<img src="https://raw.githubusercontent.com/Erb3/NoHotbarLooping/1.20/assets/fabric.png" width="256" alt="Won't support ForgeMC">
 
 ## Todo
 
@@ -10,7 +11,7 @@ A minecraft mod adding annoying seagulls.
 * Steal from players
 * Fly
 * Play animations
-* Proper icon
+* Modrinth sync
 
 ## FAQ
 
@@ -41,16 +42,7 @@ If I feel like it :)
 
 Up-to-date contact information can be found at my [GitHub profile](https://github.com/Erb3/Erb3/blob/main/README.md).
 
-## Updating the mod
+## Credits
 
-> [!!NOTE]
-> This is how I work when I update the mod to a new version.
-> You as a player should not have to do this.
-
-1. Create new branch
-2. Update gradle.properties
-3. Patch for new release
-4. Commit
-5. Push & set main-branch to new
-6. Build the jar
-7. Publish to GitHub Releases
+* Mod: @Erb3
+* Icon: @1Turtle

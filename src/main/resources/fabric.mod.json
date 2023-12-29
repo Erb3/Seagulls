@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "seagulls",
-  "version": "${version}",
+  "version": "${mod_version}",
   "name": "seagulls",
   "description": "Annoying seagulls for minecraft",
   "authors": [
