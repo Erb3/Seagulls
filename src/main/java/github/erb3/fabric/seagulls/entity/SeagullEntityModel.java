@@ -2,10 +2,10 @@ package github.erb3.fabric.seagulls.entity;
 
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.entity.model.EntityModel;
+import net.minecraft.client.render.entity.model.SinglePartEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 
-public class SeagullEntityModel extends EntityModel<SeagullEntity> {
+public class SeagullEntityModel extends SinglePartEntityModel<SeagullEntity> {
     private final ModelPart feet;
     private final ModelPart legs;
     private final ModelPart body;
@@ -48,7 +48,10 @@ public class SeagullEntityModel extends EntityModel<SeagullEntity> {
 
     @Override
     public void setAngles(SeagullEntity entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
-
+        this.getPart().traverse().forEach(ModelPart::resetTransform);
+        this.updateAnimation(entity.flyingAnimationState, SeagullEntityAnimations.wing_flaps, animationProgress, 1.0F);
+//        this.animateMovement(SeagullEntityAnimations.wing_flaps, limbAngle, limbDistance, 1.0F, 1.0F);
+        this.updateAnimation(entity.screamingAnimationState, SeagullEntityAnimations.scream, animationProgress, 0.2F);
     }
 
     @Override
@@ -58,5 +61,10 @@ public class SeagullEntityModel extends EntityModel<SeagullEntity> {
         body.render(matrices, vertices, light, overlay, red, green, blue, alpha);
         face.render(matrices, vertices, light, overlay, red, green, blue, alpha);
         bb_main.render(matrices, vertices, light, overlay, red, green, blue, alpha);
+    }
+
+    @Override
+    public ModelPart getPart() {
+        return this.bb_main;
     }
 }

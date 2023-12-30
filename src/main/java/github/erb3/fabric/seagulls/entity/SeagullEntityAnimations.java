@@ -7,6 +7,7 @@ import net.minecraft.client.render.entity.animation.Transformation;
 
 public class SeagullEntityAnimations {
     public static final Animation wing_flaps = Animation.Builder.create(1.0F)
+            .looping()
             .addBoneAnimation("tail", new Transformation(Transformation.Targets.ROTATE,
                     new Keyframe(0.0F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
                     new Keyframe(0.25F, AnimationHelper.createRotationalVector(0.0F, 0.0F, 30.0F), Transformation.Interpolations.LINEAR),

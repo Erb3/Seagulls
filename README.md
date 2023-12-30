@@ -9,7 +9,6 @@ A Minecraft mod adding annoying seagulls.
 
 * Annoying sounds
 * Steal from players
-* Fly
 * Play animations
 * Modrinth sync
 
