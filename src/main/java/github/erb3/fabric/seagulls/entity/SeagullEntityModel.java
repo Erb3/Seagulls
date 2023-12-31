@@ -11,8 +11,10 @@ public class SeagullEntityModel extends SinglePartEntityModel<SeagullEntity> {
     private final ModelPart body;
     private final ModelPart face;
     private final ModelPart bb_main;
+    private final ModelPart root;
 
     public SeagullEntityModel(ModelPart root) {
+        this.root = root;
         this.feet = root.getChild("feet");
         this.legs = root.getChild("legs");
         this.body = root.getChild("body");
@@ -49,9 +51,9 @@ public class SeagullEntityModel extends SinglePartEntityModel<SeagullEntity> {
     @Override
     public void setAngles(SeagullEntity entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
         this.getPart().traverse().forEach(ModelPart::resetTransform);
-        this.updateAnimation(entity.flyingAnimationState, SeagullEntityAnimations.wing_flaps, animationProgress, 1.0F);
-//        this.animateMovement(SeagullEntityAnimations.wing_flaps, limbAngle, limbDistance, 1.0F, 1.0F);
-        this.updateAnimation(entity.screamingAnimationState, SeagullEntityAnimations.scream, animationProgress, 0.2F);
+        this.animateMovement(SeagullEntityAnimations.wing_flaps, limbAngle, limbDistance, 5.0F, 5.0F);
+//        this.updateAnimation(entity.flyingAnimationState, SeagullEntityAnimations.wing_flaps, animationProgress, 1.0F);
+//        this.updateAnimation(entity.screamingAnimationState, SeagullEntityAnimations.scream, animationProgress, 0.2F);
     }
 
     @Override
@@ -65,6 +67,6 @@ public class SeagullEntityModel extends SinglePartEntityModel<SeagullEntity> {
 
     @Override
     public ModelPart getPart() {
-        return this.bb_main;
+        return this.root;
     }
 }
